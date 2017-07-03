@@ -78,7 +78,7 @@ def train():
                 saver.save(sess, os.path.join(MODEL_SAVE_PATH, MODEL_NAME), global_step=global_step)
 
 
-def valuate():
+def validate():
     train_image, train_label, val_image, val_label = input_data.get_train_and_val(TRAIN_PATH, VALIDATION_PERCENTAGE)
 
     x = tf.placeholder(tf.float32, [BATCH_SIZE, WIDTH, HEIGHT, CHANNEL], name='x-input')
