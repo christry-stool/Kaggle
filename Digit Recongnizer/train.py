@@ -39,7 +39,7 @@ def train():
     global_step = tf.Variable(0, trainable=False)
 
     variables_averages_op = tools.moving_average(MOVING_AVERAGE_DECAY, global_step)
-    train_loss = tools.loss(logits=y, labels=y_)
+    train_loss = tools.loss(logits=y, labels=y_, regularizer=regularizer)
     train_acc = tools.accuracy(logits=y, labels=y_)
     train_step = tools.optimizer(losses=train_loss, learning_rate=LEARNING_RATE, global_step=global_step)
 
