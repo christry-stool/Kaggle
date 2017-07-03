@@ -41,12 +41,33 @@ def full_connect(layer_name, input_tensor, out_nodes, regularizer=None):
         weights = tf.get_variable(name='weight',
                                   shape=[in_nodes, out_nodes],
                                   initializer=tf.truncated_normal_initializer(stddev=0.1))
-        if regularizer != None:
+        if regularizer is not None:
             tf.add_to_collection('losses', regularizer(weights))
         biases = tf.get_variable(name='bias',
                                  shape=[out_nodes],
                                  initializer=tf.constant_initializer(0.1))
         output = tf.nn.relu(tf.matmul(reshape_input, weights) + biases)
+        return output
+
+
+def full_connect_not_relu(layer_name, input_tensor, out_nodes, regularizer=None):
+    shape = input_tensor.get_shape()
+    if len(shape) == 4:
+        in_nodes = shape[1].value * shape[2].value * shape[3].value
+    else:
+        in_nodes = shape[-1].value
+    reshape_input = tf.reshape(input_tensor, [-1, in_nodes])
+
+    with tf.variable_scope(layer_name):
+        weights = tf.get_variable(name='weight',
+                                  shape=[in_nodes, out_nodes],
+                                  initializer=tf.truncated_normal_initializer(stddev=0.1))
+        if regularizer is not None:
+            tf.add_to_collection('losses', regularizer(weights))
+        biases = tf.get_variable(name='bias',
+                                 shape=[out_nodes],
+                                 initializer=tf.constant_initializer(0.1))
+        output = tf.matmul(reshape_input, weights) + biases
         return output
 
 
